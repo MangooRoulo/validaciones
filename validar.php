@@ -16,18 +16,17 @@
             }
 
             $nombre = $_REQUEST['nombre'];
-            $preguntas = [
-                "p1"  => ["titulo" => "1. Alan Turing nació en:", "correcta" => "1912"],
-                "p2"  => ["titulo" => "2. ¿En qué ciudad nació Alan Turing?", "correcta" => "Londres"],
-                "p3"  => ["titulo" => "3. ¿Qué profesión tenía el papá de Alan Turing?", "correcta" => "Funcionario de Indian Civil Service"],
-                "p4"  => ["titulo" => "4. ¿Dónde estudió Turing antes de Cambridge?", "correcta" => "Sherborne School"],
-                "p5"  => ["titulo" => "5. Turing tenía interés principalmente en:", "correcta" => "Teoria de numeros"],
-                "p6"  => ["titulo" => "6. ¿Qué establece el Teorema de Análisis de Kleene?", "correcta" => "Los lenguajes aceptados por autómatas finitos son exactamente los descritos por expresiones regulares"],
-                "p7"  => ["titulo" => "7. ¿Cómo se construye el sistema de ecuaciones en el Teorema de Análisis de Kleene?", "correcta" => "A partir de las transiciones del autómata expresadas en términos de expresiones regulares"],
-                "p8"  => ["titulo" => "8. ¿Qué garantiza el Teorema de Síntesis de Kleene?", "correcta" => "Toda expresión regular puede transformarse en un autómata finito equivalente"],
-                "p9"  => ["titulo" => "9. ¿Cuál es el propósito de añadir estados 'f' y 'ERROR' en un autómata?", "correcta" => "Facilitar la construcción de un autómata equivalente a una expresión regular"],
-                "p10" => ["titulo" => "10. ¿Cómo se obtiene un autómata finito a partir de una expresión regular?", "correcta" => "Aplicando un algoritmo de construcción paso a paso que traduce la expresión en estados y transiciones"]
-            ];
+            // mix de preguntas
+            require_once 'preguntas.php';
+            
+            // Transformar banco para compatibilidad con la lógica existente
+            $preguntas = [];
+            foreach ($preguntas_banco as $id => $info) {
+                $preguntas[$id] = [
+                    "titulo" => $info['pregunta'],
+                    "correcta" => $info['correcta']
+                ];
+            }
             
             $aciertos = 0;
             $resumen_html = "";
@@ -68,7 +67,7 @@
                 $user_ans = $_REQUEST[$key] ?? '';
                 $is_correct = ($user_ans === $info['correcta']);
                 $tag = $is_correct ? "[CORRECTO]" : "[INCORRECTO]";
-                fputs($ar, "{$info['titulo']}: {$user_ans} {$tag}\n");
+                fputs($ar, "{$info['titulo']}:\n {$user_ans} {$tag}\n");
             }
 
             fputs($ar, "--------------------------------------------------------\n");
